@@ -1,8 +1,9 @@
 #include "custom_op.h"
 
 REGISTER_OP("FittingNet")
-    .Attr("T: {float, double}")
+    .Attr("T: {int32, int64}")
     .Input("x: T")
+    .Input("y: T")
     .Attr("mesg: string")
     .Output("y: T");
     // .Attr("level: int32 = 0")
@@ -17,8 +18,10 @@ class FittingNetOp : public OpKernel {
 
   void Compute(OpKernelContext* context) override {
     DeviceFunctor() (device,context->eigen_device<Device>());
+
     const Tensor& input_tensor = context->input(0);
     Tensor* output_tensor = NULL;
+
     OP_REQUIRES_OK(context, context->allocate_output(0, input_tensor.shape(), &output_tensor));
     
     std::cout << "FittingNetOp" << "  " << mesg << "  " <<  input_tensor.shape().DebugString() << std::endl;
@@ -32,7 +35,23 @@ class FittingNetOp : public OpKernel {
     }
   }
 
-  private:
+namespace constantOp{
+
+
+
+void ConstantOp::constant(i  ) {
+  ctx->set_output(0, tensor_);
+  if (TF_PREDICT_FALSE(ctx->track_allocations())) {
+    ctx->record_persistent_memory_allocation(tensor_.AllocatedBytes());
+  }
+}
+
+void constant()
+
+}
+  
+
+ private:
     std::string device;
     std::string mesg;
     int level;

@@ -324,7 +324,7 @@ class EnerFitting ():
         return final_layer
             
             
-
+# 定义了一个 build 方法，用于构建一个 TensorFlow 的计算图（computational graph）来进行拟合（fitting）
     def build (self, 
                inputs : tf.Tensor,
                natoms : tf.Tensor,
@@ -332,38 +332,7 @@ class EnerFitting ():
                reuse : bool = None,
                suffix : str = '', 
     ) -> tf.Tensor:
-        """
-        Build the computational graph for fitting net
-
-        Parameters
-        ----------
-        inputs
-                The input descriptor
-        input_dict
-                Additional dict for inputs. 
-                if numb_fparam > 0, should have input_dict['fparam']
-                if numb_aparam > 0, should have input_dict['aparam']
-        natoms
-                The number of atoms. This tensor has the length of Ntypes + 2
-                natoms[0]: number of local atoms
-                natoms[1]: total number of atoms held by this processor
-                natoms[i]: 2 <= i < Ntypes+2, number of type i atoms
-        reuse
-                The weights in the networks should be reused when get the variable.
-        suffix
-                Name suffix to identify this descriptor
-
-        Returns
-        -------
-        ener
-                The system energy
-        """
-        bias_atom_e = self.bias_atom_e
-        if self.numb_fparam > 0 and ( self.fparam_avg is None or self.fparam_inv_std is None ):
-            raise RuntimeError('No data stat result. one should do data statisitic, before build')
-        if self.numb_aparam > 0 and ( self.aparam_avg is None or self.aparam_inv_std is None ):
-            raise RuntimeError('No data stat result. one should do data statisitic, before build')
-
+        #  创建一个变量作用域，并在这个作用域内定义或重用变量,此处的reuse为None，则意味着重新创建新的变量
         with tf.variable_scope('fitting_attr' + suffix, reuse = reuse) :
             t_dfparam = tf.constant(self.numb_fparam, 
                                     name = 'dfparam', 
