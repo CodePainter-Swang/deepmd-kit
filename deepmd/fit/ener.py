@@ -362,7 +362,7 @@ class EnerFitting ():
                                                 dtype = GLOBAL_TF_FLOAT_PRECISION,
                                                 trainable = False,
                                                 initializer = tf.constant_initializer(self.aparam_inv_std))
-            
+        bias_atom_e = self.bias_atom_e    
         inputs = tf.cast(tf.reshape(inputs, [-1, self.dim_descrpt * natoms[0]]), self.fitting_precision)
         if len(self.atom_ener):
             # only for atom_ener

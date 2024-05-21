@@ -1,0 +1,54 @@
+DEEPMD INFO    # ---------------output of dp test--------------- 
+DEEPMD INFO    # testing system : ../data/data_2
+DEEPMD INFO    Adjust batch size from 1024 to 2048
+DEEPMD INFO    Adjust batch size from 2048 to 4096
+DEEPMD INFO    Adjust batch size from 4096 to 8192
+DEEPMD INFO    # number of test data : 50 
+DEEPMD INFO    Energy RMSE        : 5.734373e-01 eV
+DEEPMD INFO    Energy RMSE/Natoms : 2.986653e-03 eV
+DEEPMD INFO    Force  RMSE        : 7.891429e-01 eV/A
+DEEPMD INFO    Virial RMSE        : 1.590881e+01 eV
+DEEPMD INFO    Virial RMSE/Natoms : 8.285838e-02 eV
+
+DEEPMD INFO    # ---------------output of dp test--------------- 
+DEEPMD INFO    # testing system : ../data/data_2
+DEEPMD INFO    Adjust batch size from 1024 to 2048
+DEEPMD INFO    Adjust batch size from 2048 to 4096
+DEEPMD INFO    Adjust batch size from 4096 to 8192
+DEEPMD INFO    # number of test data : 50 
+DEEPMD INFO    Energy RMSE        : 1.464546e+00 eV
+DEEPMD INFO    Energy RMSE/Natoms : 7.627842e-03 eV
+DEEPMD INFO    Force  RMSE        : 6.475555e-02 eV/A
+DEEPMD INFO    Virial RMSE        : 5.469881e+00 eV
+DEEPMD INFO    Virial RMSE/Natoms : 2.848896e-02 eV
+DEEPMD INFO    # ----------------------------------------------- 
+
+
+
+
+DEEPMD INFO    # ---------------output of dp test--------------- 
+DEEPMD INFO    # testing system : ../data/data_2
+DEEPMD INFO    Adjust batch size from 1024 to 2048
+DEEPMD INFO    Adjust batch size from 2048 to 4096
+DEEPMD INFO    Adjust batch size from 4096 to 8192
+DEEPMD INFO    # number of test data : 50 
+DEEPMD INFO    Energy RMSE        : 5.734373e-01 eV
+DEEPMD INFO    Energy RMSE/Natoms : 2.986653e-03 eV
+DEEPMD INFO    Force  RMSE        : 7.891429e-01 eV/A
+DEEPMD INFO    Force  RMSE/Natoms : 4.110119e-03 eV/A
+DEEPMD INFO    Virial RMSE        : 1.590881e+01 eV
+DEEPMD INFO    Virial RMSE/Natoms : 8.285838e-02 eV
+DEEPMD INFO    # ----------------------------------------------- 
+
+DEEPMD INFO    # ---------------output of dp test--------------- 
+DEEPMD INFO    # testing system : ../data/data_2
+DEEPMD INFO    Adjust batch size from 1024 to 2048
+DEEPMD INFO    Adjust batch size from 2048 to 4096
+DEEPMD INFO    Adjust batch size from 4096 to 8192
+DEEPMD INFO    # number of test data : 50 
+DEEPMD INFO    Energy RMSE        : 1.464546e+00 eV
+DEEPMD INFO    Energy RMSE/Natoms : 7.627842e-03 eV
+DEEPMD INFO    Force  RMSE        : 6.475555e-02 eV/A
+DEEPMD INFO    Force  RMSE/Natoms : 3.372685e-04 eV/A
+DEEPMD INFO    Virial RMSE        : 5.469881e+00 eV
+DEEPMD INFO    Virial RMSE/Natoms : 2.848896e-02 eV

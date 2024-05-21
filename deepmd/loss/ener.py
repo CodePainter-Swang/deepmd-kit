@@ -53,11 +53,19 @@ class EnerStdLoss () :
                natoms,
                model_dict,
                label_dict,
-               suffix):        
+               teacher_dict,
+               suffix):  
+
         energy = model_dict['energy']
         force = model_dict['force']
         virial = model_dict['virial']
         atom_ener = model_dict['atom_ener']
+
+        teacher_energy = teacher_dict['energy']
+        teacher_force = teacher_dict['force']
+        teacher_virial = teacher_dict['virial']
+        # teacher_atom_ener = teacher_dict['atom_ener']
+
         energy_hat = label_dict['energy']
         force_hat = label_dict['force']
         virial_hat = label_dict['virial']
@@ -69,24 +77,44 @@ class EnerStdLoss () :
         find_atom_ener = label_dict['find_atom_ener']                
         find_atom_pref = label_dict['find_atom_pref']                
 
-        l2_ener_loss = tf.reduce_mean( tf.square(energy - energy_hat), name='l2_'+suffix)
+        label_x, teacher_y = 0.5,0.5
+        l2_ener_loss1 = tf.reduce_mean( tf.square(energy - energy_hat), name='l2_'+suffix)
+        l2_ener_loss2 = tf.reduce_mean( tf.square(teacher_energy - energy), name='teacher_student_l2_'+suffix)
+        l2_ener_loss = label_x*l2_ener_loss1 + teacher_y*l2_ener_loss2
 
         force_reshape = tf.reshape (force, [-1])
         force_hat_reshape = tf.reshape (force_hat, [-1])
+        teacher_force_reshape = tf.reshape (teacher_force, [-1])
         atom_pref_reshape = tf.reshape (atom_pref, [-1])
+        
         diff_f = force_hat_reshape - force_reshape
+        diff_ff = teacher_force_reshape - force_reshape
         if self.relative_f is not None:            
             force_hat_3 = tf.reshape(force_hat, [-1, 3])
+            teacher_force_3 = tf.reshape(teacher_force, [-1, 3])
             norm_f = tf.reshape(tf.norm(force_hat_3, axis = 1), [-1, 1]) + self.relative_f
+            norm_ff = tf.reshape(tf.norm(teacher_force_3, axis = 1), [-1, 1]) + self.relative_f
+
             diff_f_3 = tf.reshape(diff_f, [-1, 3])
             diff_f_3 = diff_f_3 / norm_f
             diff_f = tf.reshape(diff_f_3, [-1])
-        l2_force_loss = tf.reduce_mean(tf.square(diff_f), name = "l2_force_" + suffix)
-        l2_pref_force_loss = tf.reduce_mean(tf.multiply(tf.square(diff_f), atom_pref_reshape), name = "l2_pref_force_" + suffix)
+
+            diff_ff_3 = tf.reshape(diff_ff, [-1, 3])
+            diff_ff_3 = diff_ff_3 / norm_ff
+            diff_ff = tf.reshape(diff_ff_3, [-1])
+
+            
+        l2_force_loss_teacher = tf.reduce_mean(tf.square(diff_ff), name = "l2_force_teacher_" + suffix)
+        l2_pref_force_loss_teacher = tf.reduce_mean(tf.multiply(tf.square(diff_ff), atom_pref_reshape), name = "l2_pref_force_teacher_" + suffix)
+
+        l2_force_loss = (tf.reduce_mean(tf.square(diff_f), name = "l2_force_" + suffix))*label_x + l2_force_loss_teacher*teacher_y
+        l2_pref_force_loss = (tf.reduce_mean(tf.multiply(tf.square(diff_f), atom_pref_reshape), name = "l2_pref_force_" + suffix))*label_x + l2_pref_force_loss_teacher*teacher_y
 
         virial_reshape = tf.reshape (virial, [-1])
         virial_hat_reshape = tf.reshape (virial_hat, [-1])
-        l2_virial_loss = tf.reduce_mean (tf.square(virial_hat_reshape - virial_reshape), name = "l2_virial_" + suffix)
+        virial_hat_teacher_reshape = tf.reshape (teacher_virial, [-1])
+        l2_virial_teacherLoss = tf.reduce_mean (tf.square(virial_hat_teacher_reshape - virial_reshape), name = "l2_virial_teacher_" + suffix)
+        l2_virial_loss = (tf.reduce_mean (tf.square(virial_hat_reshape - virial_reshape), name = "l2_virial_" + suffix))*label_x + l2_virial_teacherLoss*teacher_y
 
         atom_ener_reshape = tf.reshape (atom_ener, [-1])
         atom_ener_hat_reshape = tf.reshape (atom_ener_hat, [-1])
@@ -248,7 +276,7 @@ class EnerDipoleLoss () :
                natoms,
                model_dict,
                label_dict,
-               suffix):        
+               suffix):    
         coord = model_dict['coord']
         energy = model_dict['energy']
         atom_ener = model_dict['atom_ener']

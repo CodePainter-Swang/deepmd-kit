@@ -19,8 +19,8 @@ except ImportError:
     from .__about__ import __version__
 
 # load third-party plugins
-for ep in metadata.entry_points().get('deepmd', []):
-    ep.load()
+# for ep in metadata.entry_points().get('deepmd', []):
+#     ep.load()
 
 __all__ = [
     "descriptor",

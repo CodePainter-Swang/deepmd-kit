@@ -25,6 +25,7 @@ from deepmd.utils.graph import get_tensor_by_name, get_embedding_net_variables, 
 from tensorflow.python.client import timeline
 from deepmd.env import op_module
 from deepmd.utils.errors import GraphWithoutTensorError
+import json
 
 # load grad of force module
 import deepmd.op
@@ -32,6 +33,7 @@ import deepmd.op
 from deepmd.common import j_must_have, ClassArg, data_requirement
 
 log = logging.getLogger(__name__)
+
 
 
 def _is_subdir(path, directory):
@@ -301,13 +303,14 @@ class DPTrainer (object):
         self.learning_rate = self.lr.build(self.global_step, self.stop_batch)
         log.info("built lr")
 
-    def _build_network(self, data):        
+    def _build_network(self, data): 
         self.place_holders = {}
         if self.is_compress :
             for kk in ['coord', 'box']:
                 self.place_holders[kk] = tf.placeholder(GLOBAL_TF_FLOAT_PRECISION, [None], 't_' + kk)
             self._get_place_horders(data_requirement)
         else :
+            # run here
             self._get_place_horders(data.get_data_dict())
 
         self.place_holders['type']      = tf.placeholder(tf.int32,   [None], name='t_type')
@@ -323,13 +326,30 @@ class DPTrainer (object):
                                 self.place_holders,
                                 self.frz_model,
                                 suffix = "", 
+         
                                 reuse = False)
+        
+        teacher_dict = {}
+        trainBatch = data.get_batch()
+        from deepmd.infer import DeepPot
+        import numpy as np
+        dp = DeepPot("FatherGraph.pb")
+        atype = trainBatch['type'][0]
+        coord = trainBatch['coord'].reshape([1, -1])
+        cell = np.diag(10 * np.ones(3)).reshape([1, -1])
+
+        e, f, v = dp.eval(coord, cell, atype)
+
+        teacher_dict['energy'] = tf.constant(e, dtype=tf.float64, name='teacher_energy')
+        teacher_dict['force'] = tf.constant(f, dtype=tf.float64, name='teacher_force')
+        teacher_dict['virial'] = tf.constant(v, dtype=tf.float64, name='teacher_virial')
 
         self.l2_l, self.l2_more\
             = self.loss.build (self.learning_rate,
                                self.place_holders['natoms_vec'], 
                                self.model_pred,
                                self.place_holders,
+                               teacher_dict,
                                suffix = "test")
 
         log.info("built network")
@@ -535,6 +555,7 @@ class DPTrainer (object):
                 feed_dict[self.place_holders[kk]] = np.reshape(batch[kk], [-1])
         for ii in ['type']:
             feed_dict[self.place_holders[ii]] = np.reshape(batch[ii], [-1])
+            
         for ii in ['natoms_vec', 'default_mesh']:
             feed_dict[self.place_holders[ii]] = batch[ii]
         feed_dict[self.place_holders['is_training']] = is_training
@@ -543,14 +564,6 @@ class DPTrainer (object):
     def get_global_step(self):
         return run_sess(self.sess, self.global_step)
 
-    # def print_head (self) :  # depreciated
-    #     if self.run_opt.is_chief:
-    #         fp = open(self.disp_file, "a")
-    #         print_str = "# %5s" % 'batch'
-    #         print_str += self.loss.print_header()
-    #         print_str += '   %8s\n' % 'lr'
-    #         fp.write(print_str)
-    #         fp.close ()
 
     def valid_on_the_fly(self,
                          fp,

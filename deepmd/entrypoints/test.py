@@ -251,6 +251,7 @@ def test_ener(
     rmse_f = rmse(force - test_data["force"][:numb_test])
     rmse_v = rmse(virial - test_data["virial"][:numb_test])
     rmse_ea = rmse_e / natoms
+    rmse_fa = rmse_f / natoms
     rmse_va = rmse_v / natoms
     if has_atom_ener:
         rmse_ae = rmse(
@@ -262,6 +263,7 @@ def test_ener(
     log.info(f"Energy RMSE        : {rmse_e:e} eV")
     log.info(f"Energy RMSE/Natoms : {rmse_ea:e} eV")
     log.info(f"Force  RMSE        : {rmse_f:e} eV/A")
+    log.info(f"Force  RMSE/Natomes: {rmse_fa:e} eV/A")
     log.info(f"Virial RMSE        : {rmse_v:e} eV")
     log.info(f"Virial RMSE/Natoms : {rmse_va:e} eV")
     if has_atom_ener:

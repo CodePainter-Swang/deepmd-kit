@@ -14,7 +14,7 @@
 	    "_comment":		" that's all"
 	},
 	"fitting_net" : {
-	    "neuron":		[240, 240, 240],
+	    "neuron":		[360],
 	    "resnet_dt":	true,
 	    "seed":		1,
 	    "_comment":		" that's all"
@@ -53,10 +53,10 @@
 	    "numb_btch":	3,
 	    "_comment":		"that's all"
 	},
-	"numb_steps":	1000,
-	"seed":		10,
+	"numb_steps":	500,
+	"seed":		1,
 	"disp_file":	"lcurve.out",
-	"disp_freq":	10,
+	"disp_freq":	50,
 	"save_freq":	100,
 	"_comment":	"that's all"
     },    
