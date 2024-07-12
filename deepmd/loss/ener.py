@@ -77,10 +77,11 @@ class EnerStdLoss () :
         find_atom_ener = label_dict['find_atom_ener']                
         find_atom_pref = label_dict['find_atom_pref']                
 
-        label_x, teacher_y = 0.5,0.5
+        # label_x, teacher_y = 0.999997,0.000003
+        label_x, teacher_y = 0.999997,0.000003
         l2_ener_loss1 = tf.reduce_mean( tf.square(energy - energy_hat), name='l2_'+suffix)
         l2_ener_loss2 = tf.reduce_mean( tf.square(teacher_energy - energy), name='teacher_student_l2_'+suffix)
-        l2_ener_loss = label_x*l2_ener_loss1 + teacher_y*l2_ener_loss2
+        l2_ener_loss = label_x*l2_ener_loss1 + teacher_y * l2_ener_loss2
 
         force_reshape = tf.reshape (force, [-1])
         force_hat_reshape = tf.reshape (force_hat, [-1])

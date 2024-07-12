@@ -89,7 +89,7 @@ class EnerFitting ():
                   trainable : List[bool] = None,
                   seed : int = None,
                   atom_ener : List[float] = [],
-                  activation_function : str = 'tanh',
+                  activation_function : str = "tanh",
                   precision : str = 'default',
                   uniform_seed: bool = False
     ) -> None:
@@ -99,6 +99,8 @@ class EnerFitting ():
         # model param
         self.ntypes = descrpt.get_ntypes()
         self.dim_descrpt = descrpt.get_dim_out()
+
+
         # args = ()\
         #        .add('numb_fparam',      int,    default = 0)\
         #        .add('numb_aparam',      int,    default = 0)\
@@ -120,7 +122,7 @@ class EnerFitting ():
         self.uniform_seed = uniform_seed
         self.seed_shift = one_layer_rand_seed_shift()
         self.tot_ener_zero = tot_ener_zero
-        self.fitting_activation_fn = get_activation_func(activation_function)
+        self.fitting_activation_fn = get_activation_func('tanh')
         self.fitting_precision = get_precision(precision)
         self.trainable = trainable
         if self.trainable is None:
@@ -332,6 +334,8 @@ class EnerFitting ():
                reuse : bool = None,
                suffix : str = '', 
     ) -> tf.Tensor:
+        
+
         #  创建一个变量作用域，并在这个作用域内定义或重用变量,此处的reuse为None，则意味着重新创建新的变量
         with tf.variable_scope('fitting_attr' + suffix, reuse = reuse) :
             t_dfparam = tf.constant(self.numb_fparam, 
@@ -364,6 +368,7 @@ class EnerFitting ():
                                                 initializer = tf.constant_initializer(self.aparam_inv_std))
         bias_atom_e = self.bias_atom_e    
         inputs = tf.cast(tf.reshape(inputs, [-1, self.dim_descrpt * natoms[0]]), self.fitting_precision)
+
         if len(self.atom_ener):
             # only for atom_ener
             inputs_zero = tf.zeros_like(inputs, dtype=GLOBAL_TF_FLOAT_PRECISION)
@@ -395,6 +400,7 @@ class EnerFitting ():
             atype_embed = None
 
         if atype_embed is None:
+            print("一共需要执行神经连接的次数：", self.ntypes)
             start_index = 0
             for type_i in range(self.ntypes):
                 if bias_atom_e is None :

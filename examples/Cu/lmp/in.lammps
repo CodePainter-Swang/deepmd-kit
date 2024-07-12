@@ -1,0 +1,30 @@
+# bulk water
+
+units           metal
+boundary        p p p
+atom_style      atomic
+
+neighbor        2.0 bin
+neigh_modify    every 10 delay 0 check no
+
+read_data	copper.lmp
+group       Cu  type 1
+
+mass 		1 63.546
+
+# pair_style deepmd fathergraph.pb graph.pb out_file graph.out out_freq 10 atomic relative 1.0
+pair_style  deepmd CuSingleTanh.pb
+pair_coeff * * Cu
+
+velocity        all create 330.0 23456789
+
+fix             1 all nvt temp 330.0 330.0 0.5
+timestep        0.0005
+thermo_style    custom step pe ke etotal temp press vol
+thermo          100
+dump		1 all custom 100 Cu.dump id type x y z 
+
+compute rdf all rdf 100 1 1 
+fix 2 all ave/time 100 1 100 c_rdf[*] file CuTanh_cu.rdf mode vector
+
+run             100000

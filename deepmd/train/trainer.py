@@ -333,7 +333,7 @@ class DPTrainer (object):
         trainBatch = data.get_batch()
         from deepmd.infer import DeepPot
         import numpy as np
-        dp = DeepPot("FatherGraph.pb")
+        dp = DeepPot("CuFatherGraph.pb")
         atype = trainBatch['type'][0]
         coord = trainBatch['coord'].reshape([1, -1])
         cell = np.diag(10 * np.ones(3)).reshape([1, -1])
