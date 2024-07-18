@@ -27,7 +27,9 @@
         },
         "fitting_net": {
             "neuron": [
-                360
+                240,
+                240,
+                240
             ],
             "resnet_dt": true,
             "seed": 1,
@@ -45,7 +47,7 @@
     },
     "learning_rate": {
         "type": "exp",
-        "decay_steps": 500,
+        "decay_steps": 5000,
         "start_lr": 0.001,
         "stop_lr": 3.51e-08,
         "scale_by_worker": "linear"
@@ -89,7 +91,7 @@
         "seed": 10,
         "disp_file": "lcurve.out",
         "disp_freq": 100,
-        "save_freq": 2000,
+        "save_freq": 1000,
         "numb_test": 1,
         "save_ckpt": "model.ckpt",
         "disp_training": true,

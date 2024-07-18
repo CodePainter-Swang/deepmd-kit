@@ -3,7 +3,7 @@ from deepmd.infer import DeepPot
 import numpy as np
 from deepmd.utils.sess import run_sess
 
-dp = DeepPot("CuFatherGraph.pb")
+dp = DeepPot("CuSingleRelu.pb")
 
 atype = [ ]
 
