@@ -30,6 +30,7 @@ class TensorPrint(DeepEval):
     def tensor_print(self, tensor_name = " "):
         W = self._get_tensor(tensor_name)
         w = self.sess.run(W)
+        print(w)
         return w
     
     def printOps(self, graph):
