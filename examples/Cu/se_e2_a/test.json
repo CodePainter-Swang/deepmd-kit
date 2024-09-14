@@ -14,7 +14,7 @@
 	    "_comment":		" that's all"
 	},
 	"fitting_net" : {
-	    "neuron":		[360],
+	    "neuron":		[240],
 	    "resnet_dt":	true,
 	    "seed":		1,
 	    "_comment":		" that's all"

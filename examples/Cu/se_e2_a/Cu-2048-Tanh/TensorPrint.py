@@ -23,6 +23,9 @@ class TensorPrint(DeepEval):
             auto_batch_size=auto_batch_size,
         )
         self.sess = tf.Session(graph=self.graph, config=default_tf_session_config)
+        self.graph = self._load_graph(
+            model_file, prefix=load_prefix, default_tf_graph=default_tf_graph
+        )
 
     def tensor_print(self, tensor_name = " "):
         W = self._get_tensor(tensor_name)
@@ -31,7 +34,7 @@ class TensorPrint(DeepEval):
         return w
     
 #指定模型的路径
-tp = TensorPrint(model_file="/work/wangs/DeepMD-kit/deepmd-kit/examples/Cu/se_e2_a/CuSingleTanh.pb")
+tp = TensorPrint(model_file="/work/wangs/DeepMD-kit/deepmd-kit/examples/Cu/se_e2_a/CuSingleGraph.pb")
 
 #指定你想打印哪个tensor的name
 w = tp.tensor_print("layer_0_type_0/matrix:0")

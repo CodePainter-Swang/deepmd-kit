@@ -10,3 +10,4 @@ export Cu=/work/wangs/DeepMD-kit/deepmd-kit/examples/Cu/se_e2_a
 dp test -m graph.pb -s ../data/data_3 -n 50
 dp freeze -o graph.pb
 dp train input.json
+dp compress -i graph.pb -o graph-compress.pb

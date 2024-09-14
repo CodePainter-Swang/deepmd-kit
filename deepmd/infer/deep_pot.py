@@ -135,6 +135,7 @@ class DeepPot(DeepEval):
             self.modifier_type = run_sess(self.sess, t_modifier_type).decode("UTF-8")
         except (ValueError, KeyError):
             self.modifier_type = None
+        print("asdasdasdad")
 
         if self.modifier_type == "dipole_charge":
             t_mdl_name = self._get_tensor("modifier_attr/mdl_name:0")
